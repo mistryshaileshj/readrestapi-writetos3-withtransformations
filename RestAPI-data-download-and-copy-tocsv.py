@@ -58,11 +58,11 @@ def main():
         # df_spark.show(20, truncate=False)
     
         # Optional: Write to S3
-        output_path = "s3://vertica-data/iceandfire/characters/"
+        output_path = "s3://bucketname/characters/"
         df_spark.write.mode("overwrite").parquet(output_path)
         
         # Read the parquet files
-        parquet_df = spark.read.parquet("s3://vertica-data/iceandfire/characters/")
+        parquet_df = spark.read.parquet("s3://bucketname/iceandfire/characters/")
         
         print(f"✅ Rows in input Parquet: {parquet_df.count()}")
         
@@ -80,7 +80,7 @@ def main():
         filtered_df = single_file_df.filter((col("name").isNotNull()) & (trim(col("name")) != ""))
         
         # Write as a single CSV file (no header can also be added)
-        filtered_df.write.mode("overwrite").option("header", "true").csv("s3://vertica-data/iceandfire/characters_csv/")
+        filtered_df.write.mode("overwrite").option("header", "true").csv("s3://bucketname/iceandfire/characters_csv/")
     
     except Exception as e:
         print(f"❌ Error during API fetch: {e}")
